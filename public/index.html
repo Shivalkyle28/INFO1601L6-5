@@ -9,69 +9,71 @@
 
   <body>
     <nav>
-        <div class="nav-wrapper teal" style="padding-left: 10px;">
-           <a href="#!" class="brand-logo">Ajax Demo</a>
-        </div>
+      <div class="nav-wrapper teal" style="padding-left: 10px;">
+        <a href="#!" class="brand-logo">Ajax Demo</a>
+      </div>
     </nav>
-    <main class="row" style="height: 400px; overflow-y:scroll" style="padding: 40px">
-         <table >
-           <thead>
-                <tr>
-                   <th>#ID</th>
-                   <th>name</th>
-                   <th>Type</th>
-                   <th>website</th>
-                </tr>
-                </thead>
-                  <tbody id="result">
-                                                
-                  </tbody>
-           </table>
-     </main>
-     <pre id="details" style="background-color: gainsboro; margin: 20px; padding: 10px;">
 
-     </pre>
-     <script>
+    <main class="row" style="height: 400px; overflow-y: scroll; padding: 40px;">
+      <table>
+        <thead>
+          <tr>
+            <th>#ID</th>
+            <th>name</th>
+            <th>Type</th>
+            <th>website</th>
+          </tr>
+        </thead>
+        <tbody id="result">
+        </tbody>
+      </table>
+    </main>
 
-       function drawTable(records){
-          let result = document.querySelector('#result');
-          //add html code inside of result
-          let html = '';// create html string
-          for(let record of records){
-              //build html string
-              html += `<tr id="${record.id}">
-                <td>${record.id}</td>
-                <td>${record.name}</td>
-                <td>${record.brewery_type}</td>
-                <td><a href="#${record.id}" onclick="getData('https://api.openbrewerydb.org/breweries/${record.id}', drawDetails)" >View More Details</a></td>    
-              </tr>`;
-          }
-          result.innerHTML = html;//add html string to DOM
+    <pre id="details" style="background-color: gainsboro; margin: 20px; padding: 10px;">
+    </pre>
+
+    <script>
+      function drawTable(records){
+        let result = document.querySelector('#result');
+        let html = '';
+
+        for(let record of records){
+          html += `<tr id="${record.id}">
+            <td>${record.id}</td>
+            <td>${record.name}</td>
+            <td>${record.brewery_type}</td>
+            <td>
+              <a href="#${record.id}" onclick="getData('https://api.openbrewerydb.org/breweries/${record.id}', drawDetails)">
+                View More Details
+              </a>
+            </td>
+          </tr>`;
+        }
+
+        result.innerHTML = html;
       }
 
       function drawDetails(record){
         const section = document.querySelector('#details');
-        // details.innerHTML = `${JSON.stringify(record, null, 2)}`;
-        details.innerHTML = `<ul>
-              <li>State: ${record.state}</li>
-              <li>Country: ${record.country}</li>
-              <li>Phone: ${record.phone}</li>
+
+        section.innerHTML = `<ul>
+          <li>State: ${record.state}</li>
+          <li>Country: ${record.country}</li>
+          <li>Phone: ${record.phone}</li>
         </ul>`;
       }
 
-      //function MUST be declared async
       async function getData(url, renderFun){
         try{
-          let response = await fetch(url);//1. Send http request and get response
-          let result = await response.json();//2. Get data from response
-          renderFun(result);// 3. Do something with the data
+          let response = await fetch(url);
+          let result = await response.json();
+          renderFun(result);
         }catch(e){
-            console.log(e);//catch and log any errors
+          console.log(e);
         }
       }
-      
-      getData("https://api.openbrewerydb.org/breweries", drawTable)
-     
-     </script>
+
+      getData("https://api.openbrewerydb.org/breweries", drawTable);
+    </script>
   </body>
 </html>
